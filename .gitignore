@@ -1,0 +1,8 @@
+# Keycloak / PostgreSQL の実データ（永続化ボリューム）
+idp/data/keycloak/
+idp/data/keycloak-db/
+
+idp/certs/server.key
+idp/certs/server.crt
+
+.DS_Store

@@ -1,6 +1,8 @@
 # Keycloak / PostgreSQL の実データ（永続化ボリューム）
-idp/data/keycloak/
-idp/data/keycloak-db/
+idp/data/keycloak/*
+idp/data/keycloak-db/*
+!idp/data/keycloak/.gitkeep
+!idp/data/keycloak-db/.gitkeep
 
 idp/certs/server.key
 idp/certs/server.crt

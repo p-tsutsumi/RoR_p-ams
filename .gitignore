@@ -8,3 +8,7 @@ idp/certs/server.key
 idp/certs/server.crt
 
 .DS_Store
+
+.env
+app/.env
+idp/.env

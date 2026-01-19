@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+  rocky9:
+    build: .
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./app:/app
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=${APP_DB_HOST}
+      - DATABASE_USER=${APP_DB_USER}
+      - DATABASE_PASSWORD=${APP_DB_PASSWORD}
+      - RAILS_ENV=${RAILS_ENV}
+      - KEYCLOAK_URL=${KEYCLOAK_URL}
+    networks:
+      - default
+      - auth-bridge
+
+  db:
+    image: postgres:16
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=${APP_DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    networks:
+      - default
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - default
+
+volumes:
+  db_data:
+  redis_data:
+
+networks:
+  auth-bridge:
+    external: true

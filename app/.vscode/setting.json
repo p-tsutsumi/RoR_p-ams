@@ -1,0 +1,7 @@
+{
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "rubyLsp.formattingProvider": "rubocop",
+    "rubyLsp.diagnostics": true
+}

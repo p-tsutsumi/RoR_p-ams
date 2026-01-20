@@ -25,3 +25,8 @@
 [root@101ddbf241b1 p-ams]# cat app/assets/stylesheets/application.scss 
 @import "bootstrap";
 ```
+## 日本語対応
+```
+[root@101ddbf241b1 p-ams]# curl -s https://raw.githubusercontent.com/svenfuchs/rails-i18n/master/rails/locale/ja.yml -o config/locales/ja.yml
+[root@101ddbf241b1 p-ams]# app/p-ams/config/initializers/locale.rb
+```

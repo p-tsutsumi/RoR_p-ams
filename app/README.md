@@ -15,5 +15,13 @@
 ```
 ## slimの導入
 ```
+[root@101ddbf241b1 p-ams]# bundle install
 [root@101ddbf241b1 p-ams]# bundle exec erb2slim app/views/layouts/ --delete
+```
+## bootstrapの導入
+```
+[root@101ddbf241b1 p-ams]# bundle install
+[root@101ddbf241b1 p-ams]# mv app/assets/stylesheets/application.{css,scss} 
+[root@101ddbf241b1 p-ams]# cat app/assets/stylesheets/application.scss 
+@import "bootstrap";
 ```

@@ -8,8 +8,12 @@
 [root@101ddbf241b1 app]# cd p-ams
 
 ```
-DBの設定ファイルを修正
+## DBの設定ファイルを修正
 ```
 [root@101ddbf241b1 p-ams]# vi config/database.yml
 [root@101ddbf241b1 p-ams]# bin/rails db:create
+```
+## slimの導入
+```
+[root@101ddbf241b1 p-ams]# bundle exec erb2slim app/views/layouts/ --delete
 ```

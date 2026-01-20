@@ -1,1 +1,8 @@
 @import "bootstrap";
+
+/* 必須項目のラベルに赤色の星を付ける */
+.required::after {
+  content: " *";
+  color: #dc3545;
+  font-weight: bold;
+}

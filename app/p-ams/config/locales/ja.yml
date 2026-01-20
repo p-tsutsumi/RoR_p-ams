@@ -1,5 +1,16 @@
 ---
 ja:
+  activemodel:
+    attributes:
+      idp_user_form:
+        username: "ユーザー名"
+        email: "メールアドレス"
+        password: "パスワード"
+        password_confirmation: "パスワード（確認用）"
+        first_name: "名"
+        last_name: "姓"
+    models:
+      idp_user_form: "利用者"
   activerecord:
     errors:
       messages:

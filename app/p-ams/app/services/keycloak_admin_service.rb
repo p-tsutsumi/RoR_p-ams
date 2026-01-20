@@ -25,11 +25,35 @@ class KeycloakAdminService
     token = get_access_token
 
     conn = Faraday.new()
-    responce = conn.get("#{@base_url}/admin/realms/#{@realm}/users") do |req|
+    response = conn.get("#{@base_url}/admin/realms/#{@realm}/users") do |req|
       req.headers["Authorization"] = "Bearer #{token}"
       req.headers["Content-Type"] = "application/json"
     end
 
-    JSON.parse(responce.body)
+    JSON.parse(response.body)
+  end
+
+  def create_user(user_params)
+    token = get_access_token
+
+    conn = Faraday.new()
+    response = conn.post("#{@base_url}/admin/realms/#{@realm}/users") do |req|
+      req.headers["Authorization"] = "Bearer #{token}"
+      req.headers["Content-Type"] = "application/json"
+      req.body = {
+        username: user_params[:username],
+        enabled: true,
+        email: user_params[:email],
+        firstName: user_params[:first_name],
+        lastName: user_params[:last_name],
+        credentials: [{
+          type: "password",
+          value: user_params[:password],
+          temporary: false # 初回ログイン時のパスワード変更を強制しない
+        }]
+      }.to_json
+    end
+
+    response.success?
   end
 end

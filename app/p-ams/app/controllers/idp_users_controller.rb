@@ -15,10 +15,10 @@ class IdpUsersController < ApplicationController
         redirect_to idp_users_path, notice: "ユーザ「#{@user_form.username}」を作成しました。"
       else
         flash.now[:alert] = "ユーザーの作成に失敗しました。"
-        render :new, status: :unprocessable_content
+        render :new, status: :unprocessable_entity
       end
     else
-      render :new, status: :unprocessable_content
+      render :new, status: :unprocessable_entity
     end
   end
 

@@ -1,15 +1,16 @@
 .row.justify-content-center
+  - if @user_form.errors.present?
+    .alert.alert-danger#error_explanation
+      ul.mb-0
+        - @user_form.errors.full_messages.each do |messages|
+          li= messages
   .col-md-6
     .card.shadow-sm
       .card-header.bg-primary.text-white
         h2.h5.mb-0 新規ユーザー登録
-      - if @user_form.errors.any?
-        .alert.alert-danger
-          ul.mb-0
-            - @user_form.errors.full_messages.each do |message|
-              li = message
+
       .card-body
-        = form_with scope: :user, url: idp_users_path, local: true do |f|
+        = form_with model: @user_form, scope: :user, url: idp_users_path, local: true do |f|
           .mb-3
             = f.label :username, "ユーザー名", class: "form-label required"
             = f.text_field :username, class: "form-control", required: true

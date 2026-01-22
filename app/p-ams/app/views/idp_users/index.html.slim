@@ -5,6 +5,8 @@
     
   - if flash[:notice]
     .alert.alert-success = flash[:notice]
+  - if flash[:alert]
+    .alert.alert-danger#error_explanation = flash[:alert]
     
   .card.shadow-sm 
     .card-body.p-0
@@ -27,6 +29,11 @@
                   - else
                     span.badge.bg-secondary 無効
                 td.text-muted.small = user["id"]
+                td
+                  = button_to '削除', idp_user_path(user["id"]), 
+                              method: :delete, 
+                              data: { turbo_confirm: "ユーザ「#{user["username"]}」を削除します。よろしいですか？"}, 
+                              class: 'btn btn-danger'
           - else
             tr
               td.text-center.py-5[colspan="4"]

@@ -24,7 +24,7 @@ class KeycloakAdminService
   def list_users
     token = get_access_token
 
-    conn = Faraday.new()
+    conn = Faraday.new(ssl: { verify: true })
     response = conn.get("#{@base_url}/admin/realms/#{@realm}/users") do |req|
       req.headers["Authorization"] = "Bearer #{token}"
       req.headers["Content-Type"] = "application/json"
@@ -33,10 +33,25 @@ class KeycloakAdminService
     JSON.parse(response.body)
   end
 
+  def find_user(user_id)
+    token = get_access_token
+
+    conn = Faraday.new(ssl: { verify: true })
+    response = conn.get("#{@base_url}/admin/realms/#{@realm}/users/#{user_id}") do |req|
+      req.headers["Authorization"] = "Bearer #{token}"
+    end
+    return nil unless response.success?
+
+    JSON.parse(response.body)
+  rescue => e
+    Rails.logger.error "Keycloak ユーザ取得エラー: #{e.message}"
+    nil
+  end
+
   def create_user(user_params)
     token = get_access_token
 
-    conn = Faraday.new()
+    conn = Faraday.new(ssl: { verify: true })
     response = conn.post("#{@base_url}/admin/realms/#{@realm}/users") do |req|
       req.headers["Authorization"] = "Bearer #{token}"
       req.headers["Content-Type"] = "application/json"
@@ -55,5 +70,26 @@ class KeycloakAdminService
     end
 
     response.success?
+  end
+
+  def delete_user(user_id, username)
+    token = get_access_token
+
+    conn = Faraday.new(ssl: { verify: true })
+    response = conn.delete("#{@base_url}/admin/realms/#{@realm}/users/#{user_id}") do |req|
+      req.headers["Authorization"] = "Bearer #{token}"
+    end
+
+    if response.success? || response.status == 404
+      Rails.logger.info "Keycloak ユーザ削除成功: ID=#{user_id}, username=#{username} (Status=#{response.status})"
+      true
+    else
+      Rails.logger.warn "Keycloak ユーザ削除失敗: ID=#{user_id}, username=#{username} (Status=#{response.status}, Body=#{response.body})"
+      false
+    end
+
+  rescue => e
+    Rails.logger.error "Keycloak ユーザ削除エラー ID=#{user_id}, username=#{username} #{e.message}"
+    false
   end
 end

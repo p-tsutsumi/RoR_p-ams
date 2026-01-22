@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :idp_users, only: [:index, :new, :create], path: "users"
+  resources :idp_users, path: "users"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

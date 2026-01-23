@@ -25,12 +25,23 @@ class IdpUsersController < ApplicationController
   def destroy
     service = KeycloakAdminService.new
     user = service.find_user(params[:id])
-    username = user ? user["username"] : "不明なユーザ"
+    username = user ? user[:username] : "不明なユーザ"
     if service.delete_user(params[:id], username)
       redirect_to idp_users_path, notice: "ユーザ「#{username}」を削除しました。", status: :see_other
     else
       redirect_to idp_users_path, alert: "ユーザの削除に失敗しました。", status: :see_other
     end
+  end
+
+  def edit
+    service = KeycloakAdminService.new
+    user_data = service.find_user(params[:id])
+    @user_form = IdpUserForm.new(
+      username: user_data[:username],
+      email: user_data[:email],
+      last_name: user_data[:lastName],
+      first_name: user_data[:firstName]
+    )
   end
 
   private

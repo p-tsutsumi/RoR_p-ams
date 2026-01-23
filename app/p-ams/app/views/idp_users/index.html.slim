@@ -21,18 +21,20 @@
           - if @users.any?
             - @users.each do |user|
               tr
-                td.fw-bold = user["username"]
-                td = user["email"]
+                td.fw-bold = user[:username]
+                td = user[:email]
                 td
-                  - if user["enabled"]
+                  - if user[:enabled]
                     span.badge.bg-success 有効
                   - else
                     span.badge.bg-secondary 無効
-                td.text-muted.small = user["id"]
+                td.text-muted.small = user[:id]
                 td
-                  = button_to '削除', idp_user_path(user["id"]), 
+                  .d-flex.align-items-center
+                    = link_to '編集', edit_idp_user_path(user[:id]), class: 'btn btn-primary me-3'
+                    = button_to '削除', idp_user_path(user[:id]), 
                               method: :delete, 
-                              data: { turbo_confirm: "ユーザ「#{user["username"]}」を削除します。よろしいですか？"}, 
+                              data: { turbo_confirm: "ユーザ「#{user[:username]}」を削除します。よろしいですか？"}, 
                               class: 'btn btn-danger'
           - else
             tr

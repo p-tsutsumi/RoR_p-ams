@@ -18,7 +18,7 @@ class KeycloakAdminService
         client_id: "admin-cli"
       }
     end
-    JSON.parse(response.body)["access_token"]
+    JSON.parse(response.body, symbolize_names: true)[:access_token]
   end
 
   def list_users
@@ -30,7 +30,7 @@ class KeycloakAdminService
       req.headers["Content-Type"] = "application/json"
     end
 
-    JSON.parse(response.body)
+    JSON.parse(response.body, symbolize_names: true)
   end
 
   def find_user(user_id)
@@ -42,7 +42,7 @@ class KeycloakAdminService
     end
     return nil unless response.success?
 
-    JSON.parse(response.body)
+    JSON.parse(response.body, symbolize_names: true)
   rescue => e
     Rails.logger.error "Keycloak ユーザ取得エラー: #{e.message}"
     nil

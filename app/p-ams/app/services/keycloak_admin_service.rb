@@ -79,7 +79,11 @@ class KeycloakAdminService
       email: params[:email],
       firstName: params[:first_name],
       lastName:  params[:last_name],
-      enabled:   params[:enabled] == "1"
+      enabled:   params[:enabled] == "1",
+      attributes: {
+        # keycloakの仕様上、attributeは「文字列の配列」にする必要がある
+        is_admin: [params[:is_admin] == "1" ? "true" : "false"]
+      }
     }
 
     if params[:password].present?

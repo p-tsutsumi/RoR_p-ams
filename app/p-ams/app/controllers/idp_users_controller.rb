@@ -58,6 +58,6 @@ class IdpUsersController < ApplicationController
 
   private
     def user_params
-      params.require(:user).permit(:username, :email, :enabled, :password, :password_confirmation, :first_name, :last_name)
+      params.require(:user).permit(:username, :email, :enabled, :is_admin, :password, :password_confirmation, :first_name, :last_name)
     end
 end

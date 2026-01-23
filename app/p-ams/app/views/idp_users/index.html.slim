@@ -28,6 +28,8 @@
                     span.badge.bg-success 有効
                   - else
                     span.badge.bg-secondary 無効
+                  - if user.dig(:attributes, :is_admin)&.first == "true"
+                    span.badge.bg-danger.ms-1 管理者
                 td.text-muted.small = user[:id]
                 td
                   .d-flex.align-items-center

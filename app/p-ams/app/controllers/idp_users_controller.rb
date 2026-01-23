@@ -42,7 +42,8 @@ class IdpUsersController < ApplicationController
       email: user_data[:email],
       enabled: user_data[:enabled],
       last_name: user_data[:lastName],
-      first_name: user_data[:firstName]
+      first_name: user_data[:firstName],
+      is_admin:   user_data.dig(:attributes, :is_admin)&.first == "true"
     )
   end
 

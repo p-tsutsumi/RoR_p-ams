@@ -8,7 +8,7 @@ class IdpUserForm
     @enabled = true if @enabled.nil?
   end
 
-  validates :username, :email, :last_name, :first_name, :enable, :is_admin, presence: true
+  validates :username, :email, :last_name, :first_name, :enabled, :is_admin, presence: true
 
   # 更新時にパスワードを変更しない場合は、空のパスワードが渡される。
   # パスワードの変更情報を受け取った場合は、バリデーションでパスワードの検証を行う。

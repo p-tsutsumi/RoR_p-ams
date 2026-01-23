@@ -13,7 +13,7 @@
         = form_with model: @user_form, scope: :user, url: idp_user_path(params[:id]), method: :patch, local: true do |f|
           .mb-3
             = f.label :username, "ユーザー名", class: "form-label required"
-            = f.text_field :username, class: "form-control", required: true
+            = f.text_field :username, class: "form-control", readonly: @user_form.id.present?
           .mb-3
             = f.label :email, "メールアドレス", class: "form-label required"
             = f.email_field :email, class: "form-control", required: true

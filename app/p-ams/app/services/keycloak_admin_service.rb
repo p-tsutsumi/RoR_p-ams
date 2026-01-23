@@ -61,34 +61,38 @@ class KeycloakAdminService
         enabled: user_params[:enabled] == "1",
         firstName: user_params[:first_name],
         lastName: user_params[:last_name],
+        attributes: {
+          # keycloakの仕様上、attributeは「文字列の配列」にする必要がある
+          is_admin: [user_params[:is_admin] == "1" ? "true" : "false"]
+        },
         credentials: [{
           type: "password",
           value: user_params[:password],
           temporary: false # 初回ログイン時のパスワード変更を強制しない
-        }]
+        }],
       }.to_json
     end
 
     response.success?
   end
 
-  def update_user(user_id, params)
+  def update_user(user_id, user_params)
     token = get_access_token
     payload = {
-      username: params[:username],
-      email: params[:email],
-      firstName: params[:first_name],
-      lastName:  params[:last_name],
-      enabled:   params[:enabled] == "1",
+      username: user_params[:username],
+      email: user_params[:email],
+      firstName: user_params[:first_name],
+      lastName:  user_params[:last_name],
+      enabled:   user_params[:enabled] == "1",
       attributes: {
         # keycloakの仕様上、attributeは「文字列の配列」にする必要がある
-        is_admin: [params[:is_admin] == "1" ? "true" : "false"]
+        is_admin: [user_params[:is_admin] == "1" ? "true" : "false"]
       }
     }
 
-    if params[:password].present?
+    if user_params[:password].present?
       payload[:credentials] = [
-        { type: "password", value: params[:password], temporary: false }
+        { type: "password", value: user_params[:password], temporary: false }
       ]
     end
 

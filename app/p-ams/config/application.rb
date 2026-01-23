@@ -23,5 +23,12 @@ module PAms
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.action_view.field_error_proc = Proc.new do |html_tag, instance|
+      if /<(input|textarea|select)/.match?(html_tag)
+        html_tag.sub(/class="/, 'class="is-invalid ').html_safe
+      else
+        html_tag
+      end
+    end
   end
 end

@@ -1,0 +1,36 @@
+.row.justify-content-center
+  - if @user_form.errors.present?
+    .alert.alert-danger#error_explanation
+      ul.mb-0
+        - @user_form.errors.full_messages.each do |messages|
+          li= messages
+  .col-md-6
+    .card.shadow-sm
+      .card-header.bg-primary.text-white
+        h2.h5.mb-0 ユーザー編集
+
+      .card-body
+        = form_with model: @user_form, scope: :user, url: idp_user_path(params[:id]), method: :patch, local: true do |f|
+          .mb-3
+            = f.label :username, "ユーザー名", class: "form-label required"
+            = f.text_field :username, class: "form-control", readonly: @user_form.id.present?
+          .mb-3
+            = f.label :email, "メールアドレス", class: "form-label required"
+            = f.email_field :email, class: "form-control", required: true
+          .mb-3.form-check.attr-enabled 
+            = f.check_box :enabled, class: "form-check-input"
+            = f.label :enabled, "有効", class: "form-check-label"
+          .mb-3.form-check.attr-enabled 
+            = f.check_box :is_admin, class: "form-check-input"
+            = f.label :is_admin, "管理者", class: "form-check-label"
+          .row
+            .col-md-6.mb-3
+              = f.label :last_name, "姓", class: "form-label"
+              = f.text_field :last_name, class: "form-control"
+            .col-md-6.mb-3
+              = f.label :first_name, "名", class: "form-label"
+              = f.text_field :first_name, class: "form-control"
+          
+          .d-grid.gap-2
+            = f.submit "更新", class: "btn btn-primary"
+            = link_to "戻る", idp_users_path, class: "btn btn-outline-secondary"

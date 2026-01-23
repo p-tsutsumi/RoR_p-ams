@@ -57,8 +57,8 @@ class KeycloakAdminService
       req.headers["Content-Type"] = "application/json"
       req.body = {
         username: user_params[:username],
-        enabled: true,
         email: user_params[:email],
+        enabled: user_params[:enabled] == "1",
         firstName: user_params[:first_name],
         lastName: user_params[:last_name],
         credentials: [{
@@ -70,6 +70,41 @@ class KeycloakAdminService
     end
 
     response.success?
+  end
+
+  def update_user(user_id, params)
+    token = get_access_token
+    payload = {
+      username: params[:username],
+      email: params[:email],
+      firstName: params[:first_name],
+      lastName:  params[:last_name],
+      enabled:   params[:enabled] == "1"
+    }
+
+    if params[:password].present?
+      payload[:credentials] = [
+        { type: "password", value: params[:password], temporary: false }
+      ]
+    end
+
+    conn = Faraday.new(ssl: { verify: true })
+    response = conn.put("#{@base_url}/admin/realms/#{@realm}/users/#{user_id}") do |req|
+      req.headers["Authorization"] = "Bearer #{token}"
+      req.headers["Content-Type"] = "application/json"
+      req.body = payload.to_json
+    end
+
+    if response.success?
+      Rails.logger.info "ユーザ更新成功: ID=#{user_id}"
+      true
+    else
+      Rails.logger.warn "ユーザ情報更新失敗: ID=#{user_id}, status=#{response.status}"
+      false
+    end
+  rescue => e
+    Rails.logger.error "ユーザ情報更新エラー: ID=#{user_id}, ERR=#{e.message}"
+    false
   end
 
   def delete_user(user_id, username)

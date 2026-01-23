@@ -37,15 +37,27 @@ class IdpUsersController < ApplicationController
     service = KeycloakAdminService.new
     user_data = service.find_user(params[:id])
     @user_form = IdpUserForm.new(
+      id: user_data[:id],
       username: user_data[:username],
       email: user_data[:email],
+      enabled: user_data[:enabled],
       last_name: user_data[:lastName],
       first_name: user_data[:firstName]
     )
   end
 
+  def update
+    @user_form = IdpUserForm.new(user_params.merge(id: params[:id]))
+    service = KeycloakAdminService.new
+    if service.update_user(params[:id], user_params)
+      redirect_to idp_users_path, notice: "ユーザ「#{@user_form.username}」を更新しました。"
+    else
+      render :edit, status: :unprocessable_content
+    end
+  end
+
   private
     def user_params
-      params.require(:user).permit(:username, :email, :password, :password_confirmation, :first_name, :last_name)
+      params.require(:user).permit(:username, :email, :enabled, :password, :password_confirmation, :first_name, :last_name)
     end
 end

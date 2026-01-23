@@ -7,10 +7,10 @@
   .col-md-6
     .card.shadow-sm
       .card-header.bg-primary.text-white
-        h2.h5.mb-0 新規ユーザー登録
+        h2.h5.mb-0 ユーザー編集
 
       .card-body
-        = form_with model: @user_form, scope: :user, url: idp_users_path, local: true do |f|
+        = form_with model: @user_form, scope: :user, url: idp_user_path(params[:id]), method: :patch, local: true do |f|
           .mb-3
             = f.label :username, "ユーザー名", class: "form-label required"
             = f.text_field :username, class: "form-control", required: true
@@ -20,12 +20,6 @@
           .mb-3.form-check.attr-enabled 
             = f.check_box :enabled, class: "form-check-input"
             = f.label :enabled, "有効", class: "form-check-label"
-          .mb-3
-            = f.label :password, "パスワード", class: "form-label required"
-            = f.password_field :password, class: "form-control", required: true
-          .mb-3
-            = f.label :password_confirmation, "パスワード（確認用）", class: "form-label required"
-            = f.password_field :password_confirmation, class: "form-control"
           .row
             .col-md-6.mb-3
               = f.label :last_name, "姓", class: "form-label"
@@ -35,5 +29,5 @@
               = f.text_field :first_name, class: "form-control"
           
           .d-grid.gap-2
-            = f.submit "Keycloakに登録", class: "btn btn-primary"
+            = f.submit "更新", class: "btn btn-primary"
             = link_to "戻る", idp_users_path, class: "btn btn-outline-secondary"

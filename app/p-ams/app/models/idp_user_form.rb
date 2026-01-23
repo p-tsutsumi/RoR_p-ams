@@ -1,11 +1,17 @@
 class IdpUserForm
   include ActiveModel::Model
 
-  attr_accessor :username, :email, :password, :password_confirmation, :first_name, :last_name
+  attr_accessor :id, :username, :email, :password, :password_confirmation, :first_name, :last_name, :enabled
 
-  validates :username, presence: true
-  validates :email, presence: true
-  validates :password, presence: true, length: { minimum: 8 }, confirmation: true
+  def initialize(attributes = {})
+    super(attributes)
+    @enabled = true if @enabled.nil?
+  end
 
-  validates :password_confirmation, presence: true
+  validates :username, :email, :last_name, :first_name, presence: true
+
+  # 更新時にパスワードを変更しない場合は、空のパスワードが渡される。
+  # パスワードの変更情報を受け取った場合は、バリデーションでパスワードの検証を行う。
+  validates :password, presence: true, length: { minimum: 8 }, confirmation: true, if: -> { password.present? }
+  validates :password_confirmation, presence: true, if: -> { password.present? }
 end

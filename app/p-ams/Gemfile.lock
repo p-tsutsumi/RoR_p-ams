@@ -323,6 +323,13 @@ GEM
       erb
       psych (>= 4.0.0)
       tsort
+    redis (5.4.1)
+      redis-client (>= 0.22.0)
+    redis-client (0.26.3)
+      connection_pool
+    redis-session-store (0.11.6)
+      actionpack (>= 5.2.4.1, < 9)
+      redis (>= 3, < 6)
     regexp_parser (2.11.3)
     reline (0.6.3)
       io-console (~> 0.5)
@@ -434,6 +441,7 @@ DEPENDENCIES
   pg (~> 1.1)
   puma (>= 5.0)
   rails (~> 7.1.6)
+  redis-session-store
   selenium-webdriver
   slim-rails
   sprockets-rails

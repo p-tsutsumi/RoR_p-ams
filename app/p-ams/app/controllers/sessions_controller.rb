@@ -6,6 +6,8 @@ class SessionsController < ApplicationController
 
     Rails.logger.debug "=== OmniAuth Raw Info ==="
     Rails.logger.debug auth.extra.raw_info.inspect
+    raw_info = auth.extra.raw_info
+    puts "DEBUG: is_admin value is #{raw_info[:is_admin].inspect} (Class: #{raw_info[:is_admin].class})"
 
     is_admin = auth.extra.raw_info[:is_admin]
     user_id = auth.uid
@@ -13,8 +15,10 @@ class SessionsController < ApplicationController
 
     if is_admin
       session[:id_token] = auth.credentials.id_token
+      session[:access_token] = auth.credentials.token
       session[:user_id] = user_id
       session[:user_name] = user_name
+      session[:is_admin] = is_admin
 
       Rails.logger.info("ログインしました: username=#{user_name}")
       redirect_to idp_users_path, notice: "管理者としてログインしました。"

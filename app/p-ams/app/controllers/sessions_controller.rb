@@ -14,6 +14,7 @@ class SessionsController < ApplicationController
     user_name = auth.info.name
 
     if is_admin
+      session[:refresh_token] = auth.credentials.refresh_token
       session[:id_token] = auth.credentials.id_token
       session[:access_token] = auth.credentials.token
       session[:user_id] = user_id

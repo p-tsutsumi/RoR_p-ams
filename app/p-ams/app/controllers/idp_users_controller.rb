@@ -1,4 +1,7 @@
 class IdpUsersController < ApplicationController
+  before_action :ensure_admin!
+  before_action :verify_keycloak_session!, only: [:create, :update, :destroy]
+
   def index
     @users = KeycloakAdminService.new.list_users
   end

@@ -10,6 +10,7 @@ services:
     working_dir: /app
     ports:
       - "3000:3000"
+      - "3443:3443"
     depends_on:
       - db
     environment:
@@ -21,6 +22,9 @@ services:
       - KC_ADMIN_USER=${KC_ADMIN_USER}
       - KC_ADMIN_PASSWORD=${KC_ADMIN_PASSWORD}
       - KC_REALM=${KC_REALM}
+      - KC_CLIENT_ID=${KC_CLIENT_ID}
+      - KC_CLIENT_SECRET=${KC_CLIENT_SECRET}
+      - KC_REDIRECT_URI=${KC_REDIRECT_URI}
     networks:
       - default
       - auth-bridge

@@ -10,6 +10,7 @@ class SessionsController < ApplicationController
     user_name = auth.info.name
 
     if is_admin
+      session[:id_token] = auth.credentials.id_token
       session[:user_id] = user_id
       session[:user_name] = user_name
 
@@ -25,7 +26,13 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session[:user_id] = nil
-    redirect_to root_path, notice: "ログアウトしました。"
+    id_token = session[:id_token]
+    session.clear
+
+    issuer = "https://localhost/auth/realms/#{ENV.fetch("KC_REALM")}"
+    post_logout_redirect_uri = ERB::Util.url_encode("http://localhost:3000/login")
+
+    logout_url = "#{issuer}/protocol/openid-connect/logout?id_token_hint=#{id_token}&post_logout_redirect_uri=#{post_logout_redirect_uri}"
+    redirect_to logout_url, allow_other_host: true
   end
 end

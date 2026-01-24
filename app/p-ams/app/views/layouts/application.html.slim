@@ -11,5 +11,8 @@ html
   body
     .app-title.navbar.navbar-expand-md.navbar-light.bg-light
       .navbar-brand p-ams
+    - if session[:user_id]
+      span.me-3 = "ログイン中: #{session[:user_name]}"
+      = button_to 'ログアウト', logout_path, method: :delete, data: { turbo: false }, class: 'btn btn-outline-danger'
     .container
     = yield

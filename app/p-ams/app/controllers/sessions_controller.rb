@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:create, :failure]
+
   def create
     auth = request.env["omniauth.auth"]
 
@@ -17,7 +19,7 @@ class SessionsController < ApplicationController
       Rails.logger.info("ログインしました: username=#{user_name}")
       redirect_to idp_users_path, notice: "管理者としてログインしました。"
     else
-      redirect_to root_path, alert: "アクセス権がありません。 username=#{user_name}"
+      keycloak_logout(auth.credentials.id_token)
     end
   end
 
@@ -27,12 +29,16 @@ class SessionsController < ApplicationController
 
   def destroy
     id_token = session[:id_token]
-    session.clear
-
-    issuer = "https://localhost/auth/realms/#{ENV.fetch("KC_REALM")}"
-    post_logout_redirect_uri = ERB::Util.url_encode("http://localhost:3000/login")
-
-    logout_url = "#{issuer}/protocol/openid-connect/logout?id_token_hint=#{id_token}&post_logout_redirect_uri=#{post_logout_redirect_uri}"
-    redirect_to logout_url, allow_other_host: true
+    keycloak_logout(id_token)
   end
+
+  private
+    def keycloak_logout(id_token)
+      session.clear
+      issuer = "https://localhost/auth/realms/#{ENV.fetch("KC_REALM")}"
+      post_logout_redirect_uri = ERB::Util.url_encode("http://localhost:3000/login")
+
+      logout_url = "#{issuer}/protocol/openid-connect/logout?id_token_hint=#{id_token}&post_logout_redirect_uri=#{post_logout_redirect_uri}"
+      redirect_to logout_url, allow_other_host: true
+    end
 end

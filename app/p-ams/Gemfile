@@ -71,3 +71,8 @@ gem "html2slim", github: "slim-template/html2slim"
 gem "bootstrap"
 gem "dartsass-rails"
 gem "faraday"
+
+# OIDC
+gem "omniauth", "~> 2.1"
+gem "omniauth_openid_connect", ">= 0.8.0"
+gem "omniauth-rails_csrf_protection", "~> 1.0"

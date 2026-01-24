@@ -7,9 +7,16 @@ RUN dnf install -y perl zlib-devel openssl-devel gcc
 RUN dnf install -y libffi-devel openssl-devel readline-devel postgresql-devel postgresql
 RUN dnf install -y nodejs
 RUN dnf install -y --enablerepo=crb libyaml-devel
+RUN dnf install -y nginx
 
 COPY ./idp/certs/server.crt /etc/pki/ca-trust/source/anchors/keycloak-server.crt
+
+RUN mkdir /certs
+RUN openssl req -x509 -newkey rsa:4096 -keyout certs/server.key -out /certs/server.crt -days 3650 -nodes -subj "/CN=localhost"
+COPY /certs/server.crt /etc/pki/ca-trust/source/anchors/rails-server.crt
+COPY ./infra/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 RUN update-ca-trust
+RUN nginx
 
 RUN git clone https://github.com/rbenv/rbenv.git ~/.rbenv && \
     git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build

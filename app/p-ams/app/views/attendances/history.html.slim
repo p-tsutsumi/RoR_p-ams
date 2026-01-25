@@ -8,6 +8,18 @@
       = link_to "今月", history_attendances_path(date: Date.current), class: "btn btn-outline-secondary btn-sm"
       = link_to "次月", history_attendances_path(date: @target_date.next_month), class: "btn btn-outline-secondary btn-sm"
 
+  .row.mb-4
+    .col-md-6
+      .card.bg-primary.text-white
+        .card-body.text-center
+          .small 出勤日数
+          .h2.mb-0 = "#{@working_days_count} 日"
+    .col-md-6
+      .card.bg-success.text-white
+        .card-body.text-center
+          .small 合計労働時間
+          .h2.mb-0 = "#{@total_working_hours} 時間"
+
   .card.shadow-sm
     .table-responsive
       table.table.table-hover.align-middle.mb-0

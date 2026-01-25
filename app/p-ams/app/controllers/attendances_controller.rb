@@ -35,9 +35,18 @@ class AttendancesController < ApplicationController
     @end_date = @target_date.end_of_month
     @calendar_days = (@start_date..@end_date).to_a
 
-    @monthly_attendances = Attendance.where(user_id: session[:user_id])
+    attendances_array = Attendance.where(user_id: session[:user_id])
                                      .where(working_date: @start_date..@end_date)
-                                     .index_by(&:working_date)
+
+    # Viewで日付から索引しやすいようにハッシュ化
+    @monthly_attendances = attendances_array.index_by(&:working_date)
+
+
+    # 出勤データを算出するために、出勤・退勤処理が完了したデータを抽出
+    working_records = attendances_array.select { |a| a.clock_in_at.present? && a.clock_out_at.present? }
+
+    @working_days_count = working_records.length
+    @total_working_hours = (working_records.sum { |a| a[:clock_out_at] - a[:clock_in_at] } / 3600.0).round(1)
   end
 
   private

@@ -29,6 +29,17 @@ class AttendancesController < ApplicationController
     end
   end
 
+  def history
+    @target_date = params[:date] ? Date.parse(params[:date]) : Date.current
+    @start_date = @target_date.beginning_of_month
+    @end_date = @target_date.end_of_month
+    @calendar_days = (@start_date..@end_date).to_a
+
+    @monthly_attendances = Attendance.where(user_id: session[:user_id])
+                                     .where(working_date: @start_date..@end_date)
+                                     .index_by(&:working_date)
+  end
+
   private
     def set_current_attendance
       @current_attendance = Attendance.find_by(

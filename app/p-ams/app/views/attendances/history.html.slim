@@ -1,0 +1,31 @@
+.container.mt-4
+
+  .d-flex.justify-content-between.align-items-center.mb-3
+    h2.h4 = "#{@target_date.year}年#{@target_date.month}月の勤務実績"
+    
+    .btn-group
+      = link_to "前月", history_attendances_path(date: @target_date.prev_month), class: "btn btn-outline-secondary btn-sm"
+      = link_to "今月", history_attendances_path(date: Date.current), class: "btn btn-outline-secondary btn-sm"
+      = link_to "次月", history_attendances_path(date: @target_date.next_month), class: "btn btn-outline-secondary btn-sm"
+
+  .card.shadow-sm
+    .table-responsive
+      table.table.table-hover.align-middle.mb-0
+        thead.table-light
+          tr
+            th.text-center width="80" 日付
+            th.text-center width="80" 曜日
+            th.text-center 出勤
+            th.text-center 退勤
+            th 備考
+        tbody
+          - @calendar_days.each do |day|
+            - attendance = @monthly_attendances[day]
+            - row_class = case day.wday; when 6; 'table-info'; when 0; 'table-danger'; end
+            
+            tr class=row_class
+              td.text-center = day.day
+              td.text-center = %w(日 月 火 水 木 金 土)[day.wday]
+              td.text-center.fw-bold = attendance&.clock_in_at&.strftime("%H:%M") || "-"
+              td.text-center.fw-bold = attendance&.clock_out_at&.strftime("%H:%M") || "-"
+              td.small.text-muted = attendance&.note

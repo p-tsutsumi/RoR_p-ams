@@ -15,4 +15,9 @@ html
       span.me-3 = "ログイン中: #{session[:user_name]}"
       = button_to 'ログアウト', logout_path, method: :delete, data: { turbo: false }, class: 'btn btn-outline-danger'
     .container
+      - flash.each do |key, value|
+        - alert_class = key == "notice" ? "alert-success" : "alert-danger"
+        div class="alert #{alert_class} alert-dismissible fade show" role="alert"
+          = value 
+          button.btn-close type="button" data-bs-dismiss="alert" aria-label="Close"
     = yield

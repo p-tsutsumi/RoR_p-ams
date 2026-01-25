@@ -1,6 +1,13 @@
 .container.text-center.mt-5
   h1.mb-4 勤怠管理システム
-  
+  .mb-3
+    - if @current_attendance&.clock_out_at
+      span.badge.rounded-pill.bg-secondary.fs-5 退勤済
+    - elsif @current_attendance&.clock_in_at
+      span.badge.rounded-pill.bg-success.fs-5 勤務中
+    - else
+      span.badge.rounded-pill.bg-light.text-dark.border.fs-5 未出勤 
+
   .display-clock.mb-5
     #current-date.h4.text-muted
     #current-time.display-1.fw-bold[data-controller="clock"]
@@ -10,7 +17,7 @@
       = button_to "出勤", attendances_path, method: :post, 
         form_class: "w-100",
         class: "btn btn-primary btn-lg py-2 fs-5 fw-bold shadow-sm w-50"
-      = button_to "退勤", attendances_path, method: :patch, 
+      = button_to "退勤", clock_out_attendances_path, method: :patch, 
         form_class: "w-100",
         class: "btn btn-danger btn-lg py-2 fs-5 fw-bold shadow-sm w-50", 
         data: { confirm: "退勤しますか？" }

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :attendances, only: [:index, :create, :update]
   resources :idp_users, path: "users"
 
   get "/login", to: "home#index"

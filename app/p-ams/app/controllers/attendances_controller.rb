@@ -20,9 +20,8 @@ class AttendancesController < ApplicationController
   def clock_out
     if @current_attendance.nil?
       redirect_to attendances_path, alert: "本日の出勤データが見つかりません。"
-    elsif @current_attendance.clock_out_at.present?
-      redirect_to attendances_path, alert: "すでに退勤済みです。"
     elsif @current_attendance.update(clock_out_at: Time.current)
+      @current_attendance.create_regular_break
       redirect_to attendances_path, notice: "退勤しました。"
     else
       redirect_to attendances_path, alert: "退勤処理に失敗しました。"

@@ -8,6 +8,20 @@ class Attendance < ApplicationRecord
     end
   end
 
+  def create_regular_break
+    noon_start = clock_in_at.change(hour: 12, min: 0)
+    noon_end = clock_in_at.change(hour: 13, min: 0)
+    if clock_in_at < noon_start && clock_out_at > noon_end
+      unless break_times.regular.exists?
+        break_times.create!(
+          break_type: :regular,
+          started_at: noon_start,
+          ended_at:   noon_end
+        )
+      end
+    end
+  end
+
   private
     def clock_out_after_clock_in
       return if clock_in_at.blank? || clcok_out_at.blank?

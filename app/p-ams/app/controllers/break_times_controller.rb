@@ -6,9 +6,11 @@ class BreakTimesController < ApplicationController
 
     case [last_break&.started_at.present?, last_break&.ended_at.present?, type]
     in [true, false, "end"]
+      # 休憩開始時刻がある状態で、休憩終了が押下されたら更新。
       last_break.update(ended_at: Time.current)
       @break_time = last_break
     else
+      # 上記以外は新規レコード作成。休憩の異常レコードは、修正申請で修正してもらう運用。
       @break_time = new_break_time_record(attendance, type)
       unless @break_time.save
         redirect_to attendances_path, alert: "休憩は1日3回までです"

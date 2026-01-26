@@ -31,6 +31,9 @@ html
                   = link_to '打刻画面', attendances_path, class: 'nav-link px-3'
                 li.nav-item
                   = link_to '出勤簿一覧', history_attendances_path, class: 'nav-link px-3'
+                - if session[:is_admin]
+                  li.nav-item
+                    = link_to 'ユーザ管理', idp_users_path, class: 'nav-link px-3'
               
               hr.d-lg-none.w-100
 

@@ -15,12 +15,14 @@
   = turbo_frame_tag "punch_area"
     .d-grid.gap-3.col-md-10.col-lg-10.mx-auto
       = button_to "出勤", attendances_path, method: :post, 
-        form_class: "w-100",
-        class: "btn btn-primary btn-lg py-2 fs-5 fw-bold shadow-sm w-50"
+        class: "btn btn-primary btn-lg fw-bold shadow-sm w-40"
       = button_to "退勤", clock_out_attendances_path, method: :patch, 
-        form_class: "w-100",
-        class: "btn btn-danger btn-lg py-2 fs-5 fw-bold shadow-sm w-50", 
+        class: "btn btn-danger btn-lg fw-bold shadow-sm w-40", 
         data: { confirm: "退勤しますか？" }
+      - if @current_attendance
+        .d-flex.gap-2.justify-content-center
+          = button_to '休憩開始', break_times_path(attendance_id: @current_attendance.id, type: 'start'), method: :post, class: 'btn btn-info'
+          = button_to '休憩終了', break_times_path(attendance_id: @current_attendance.id, type: 'end'), method: :post, class: 'btn btn-secondary'
 
   .mt-5.col-8.mx-auto
     h3 本日の記録

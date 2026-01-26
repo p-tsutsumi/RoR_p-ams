@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       get :history
     end
   end
+  resources :break_times, only: [:create, :update, :destroy]
   resources :idp_users, path: "users"
 
   get "/login", to: "home#index"

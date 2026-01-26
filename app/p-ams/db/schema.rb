@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_01_25_023154) do
+ActiveRecord::Schema[7.1].define(version: 2026_01_26_141929) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -26,4 +26,15 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_25_023154) do
     t.index ["working_date"], name: "index_attendances_on_working_date"
   end
 
+  create_table "break_times", force: :cascade do |t|
+    t.bigint "attendance_id", null: false
+    t.integer "break_type"
+    t.datetime "started_at"
+    t.datetime "ended_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attendance_id"], name: "index_break_times_on_attendance_id"
+  end
+
+  add_foreign_key "break_times", "attendances"
 end

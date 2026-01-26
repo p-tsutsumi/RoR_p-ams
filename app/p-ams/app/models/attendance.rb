@@ -2,6 +2,12 @@ class Attendance < ApplicationRecord
   validates :working_date, presence: true, uniqueness: { scope: :user_id }
   validates :user_id, presence: true
 
+  has_many :break_times do
+    def last_private
+      where(break_type: :private_out).order(:id).last
+    end
+  end
+
   private
     def clock_out_after_clock_in
       return if clock_in_at.blank? || clcok_out_at.blank?

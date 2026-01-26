@@ -22,6 +22,12 @@ class Attendance < ApplicationRecord
     end
   end
 
+  def total_break_seconds
+    breaks = break_times.where.not(started_at: nil).where.not(ended_at: nil)
+
+    breaks.sum { |b| b.ended_at - b.started_at }
+  end
+
   private
     def clock_out_after_clock_in
       return if clock_in_at.blank? || clcok_out_at.blank?

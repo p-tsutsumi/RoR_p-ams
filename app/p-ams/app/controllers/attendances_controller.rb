@@ -36,6 +36,7 @@ class AttendancesController < ApplicationController
 
     attendances_array = Attendance.where(user_id: session[:user_id])
                                      .where(working_date: @start_date..@end_date)
+                                     .includes(:break_times)
 
     # Viewで日付から索引しやすいようにハッシュ化
     @monthly_attendances = attendances_array.index_by(&:working_date)
@@ -44,8 +45,17 @@ class AttendancesController < ApplicationController
     # 出勤データを算出するために、出勤・退勤処理が完了したデータを抽出
     working_records = attendances_array.select { |a| a.clock_in_at.present? && a.clock_out_at.present? }
 
+
     @working_days_count = working_records.length
-    @total_working_hours = (working_records.sum { |a| a[:clock_out_at] - a[:clock_in_at] } / 3600.0).round(1)
+    total_break_seconds = working_records.flat_map(&:break_times)
+                                     .select { |b| b.started_at && b.ended_at }
+                                     .sum { |b| b.ended_at - b.started_at }
+
+    total_break_hours = (total_break_seconds / 3600.0).round(1)
+
+    # 合計時間の算出
+    gross_working_hours = (working_records.sum { |a| a.clock_out_at - a.clock_in_at } / 3600.0)
+    @total_working_hours = (gross_working_hours - total_break_hours).round(1)
   end
 
   private

@@ -124,6 +124,8 @@ GEM
     drb (2.2.3)
     email_validator (2.2.4)
       activemodel
+    enum_help (0.0.20)
+      activesupport (>= 3.0.0)
     erb (6.0.1)
     erubi (1.13.1)
     faraday (2.14.0)
@@ -427,10 +429,11 @@ PLATFORMS
 
 DEPENDENCIES
   bootsnap
-  bootstrap
+  bootstrap (~> 5.3)
   capybara
   dartsass-rails
   debug
+  enum_help
   faraday
   html2slim!
   importmap-rails

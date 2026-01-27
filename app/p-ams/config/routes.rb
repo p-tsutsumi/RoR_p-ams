@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  resources :attendances, only: [:index, :create, :update] do
+    collection do
+      patch :clock_out
+      get :history
+    end
+  end
+  resources :break_times, only: [:create, :update, :destroy]
   resources :idp_users, path: "users"
 
   get "/login", to: "home#index"

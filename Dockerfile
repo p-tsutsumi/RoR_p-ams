@@ -13,7 +13,7 @@ COPY ./idp/certs/server.crt /etc/pki/ca-trust/source/anchors/keycloak-server.crt
 
 RUN mkdir /certs
 RUN openssl req -x509 -newkey rsa:4096 -keyout certs/server.key -out /certs/server.crt -days 3650 -nodes -subj "/CN=localhost"
-COPY /certs/server.crt /etc/pki/ca-trust/source/anchors/rails-server.crt
+RUN cp -p /certs/server.crt /etc/pki/ca-trust/source/anchors/rails-server.crt
 COPY ./infra/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 RUN update-ca-trust
 RUN nginx

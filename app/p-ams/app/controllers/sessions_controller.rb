@@ -13,19 +13,15 @@ class SessionsController < ApplicationController
     user_id = auth.uid
     user_name = auth.info.name
 
-    if is_admin
-      session[:refresh_token] = auth.credentials.refresh_token
-      session[:id_token] = auth.credentials.id_token
-      session[:access_token] = auth.credentials.token
-      session[:user_id] = user_id
-      session[:user_name] = user_name
-      session[:is_admin] = is_admin
+    session[:refresh_token] = auth.credentials.refresh_token
+    session[:id_token] = auth.credentials.id_token
+    session[:access_token] = auth.credentials.token
+    session[:user_id] = user_id
+    session[:user_name] = user_name
+    session[:is_admin] = is_admin
 
-      Rails.logger.info("ログインしました: username=#{user_name}")
-      redirect_to idp_users_path, notice: "管理者としてログインしました。"
-    else
-      keycloak_logout(auth.credentials.id_token)
-    end
+    Rails.logger.info("ログインしました: username=#{user_name}")
+    redirect_to attendances_path
   end
 
   def failure

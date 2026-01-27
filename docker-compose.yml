@@ -25,6 +25,7 @@ services:
       - KC_CLIENT_ID=${KC_CLIENT_ID}
       - KC_CLIENT_SECRET=${KC_CLIENT_SECRET}
       - KC_REDIRECT_URI=${KC_REDIRECT_URI}
+      - TZ="Asia/Tokyo"
     networks:
       - default
       - auth-bridge

@@ -8,11 +8,46 @@ html
     = csp_meta_tag
     = stylesheet_link_tag "application", "data-turbo-track": "reload"
     = javascript_importmap_tags
+    script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
   body
-    .app-title.navbar.navbar-expand-md.navbar-light.bg-light
-      .navbar-brand p-ams
-    - if session[:user_id]
-      span.me-3 = "ログイン中: #{session[:user_name]}"
-      = button_to 'ログアウト', logout_path, method: :delete, data: { turbo: false }, class: 'btn btn-outline-danger'
+    nav.navbar.navbar-light.bg-light.shadow-sm.mb-4
+      .container-fluid
+        / ロゴ（左側）
+        a.navbar-brand.fw-bold href=root_path p-ams
+      
+        / ハンバーガーボタン
+        - if session[:user_id]
+          button.navbar-toggler type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-expanded="false"
+            span.navbar-toggler-icon
+        
+          .offcanvas.offcanvas-end#offcanvasNavbar tabindex="-1" aria-labelledby="offcanvasNavbarLabel"
+            .offcanvas-header
+              h5.offcanvas-title#offcanvasNavbarLabel メニュー
+              button.button.btn-close type="button" data-bs-dismiss="offcanvas" aria-label="Close"
+
+            .offcanvas-body
+              ul.navbar-nav.ms-auto.align-items-center
+                li.nav-item
+                  = link_to '打刻画面', attendances_path, class: 'nav-link px-3'
+                li.nav-item
+                  = link_to '出勤簿一覧', history_attendances_path, class: 'nav-link px-3'
+                - if session[:is_admin]
+                  li.nav-item
+                    = link_to 'ユーザ管理', idp_users_path, class: 'nav-link px-3'
+              
+              hr.d-lg-none.w-100
+
+                li.nav-item.px-3
+                  span.navbar-text
+                    i.bi.bi-person-circle.me-2
+                    = "ログイン中: #{session[:user_name]}"
+                li.nav-item.px-3
+                  = button_to 'ログアウト', logout_path, method: :delete, data: { turbo: false }, class: 'btn btn-outline-danger btn-sm text-nowrap'          
+    
     .container
+      - flash.each do |key, value|
+        - alert_class = key == "notice" ? "alert-success" : "alert-danger"
+        div class="alert #{alert_class} alert-dismissible fade show" role="alert"
+          = value 
+          button.btn-close type="button" data-bs-dismiss="alert" aria-label="Close"
     = yield

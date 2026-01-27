@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_01_26_141929) do
+ActiveRecord::Schema[7.1].define(version: 2026_01_26_234802) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,6 +22,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_26_141929) do
     t.text "note"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "work_category", default: 0, null: false
     t.index ["user_id"], name: "index_attendances_on_user_id"
     t.index ["working_date"], name: "index_attendances_on_working_date"
   end

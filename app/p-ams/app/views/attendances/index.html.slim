@@ -1,4 +1,4 @@
-.container.text-center.mt-5
+.container.text-center.mt-5[data-controller="clock"]
   h1.mb-4 勤怠管理システム
   .mb-3
     - if @current_attendance&.clock_out_at
@@ -9,16 +9,28 @@
       span.badge.rounded-pill.bg-light.text-dark.border.fs-5 未出勤 
 
   .display-clock.mb-5
-    #current-date.h4.text-muted
-    #current-time.display-1.fw-bold[data-controller="clock"]
+    / IDの直後に属性を並べて書きます
+    #current-date.h4.text-muted[data-clock-target="date"]
+    #current-time.display-1.fw-bold[data-clock-target="time"]
   
   = turbo_frame_tag "punch_area"
-    .d-grid.gap-3.col-md-10.col-lg-10.mx-auto
-      = button_to "出勤", attendances_path, method: :post, 
-        class: "btn btn-primary btn-lg fw-bold shadow-sm w-40"
-      = button_to "退勤", clock_out_attendances_path, method: :patch, 
-        class: "btn btn-danger btn-lg fw-bold shadow-sm w-40", 
-        data: { confirm: "退勤しますか？" }
+    .d-flex.flex-column.gap-3.align-items-center
+      = form_with url: attendances_path, method: :post, local: true, class: "w-100" do |f|
+        / テレワークスイッチ
+        .mb-3.d-flex.justify-content-center
+          .form-check.form-switch
+            = f.check_box :work_category, { class: "form-check-input", role: "switch", id: "telework_switch" }, "telework", "normal"
+            = f.label :work_category, "テレワーク", class: "form-check-label ms-2", for: "telework_switch"
+        / 出勤・退勤ボタンのグループ
+        .d-flex.gap-3.justify-content-center.w-100
+          = button_to "出勤", attendances_path, method: :post, 
+            class: "btn btn-primary btn-lg fw-bold shadow-sm flex-fill",
+            style: "max-width: 100px;"
+          
+          = button_to "退勤", clock_out_attendances_path, method: :patch, 
+            class: "btn btn-danger btn-lg fw-bold shadow-sm flex-fill", 
+            style: "max-width: 100px;",
+            data: { confirm: "退勤しますか？" }
       - if @current_attendance
         .d-flex.gap-2.justify-content-center
           = button_to '休憩開始', break_times_path(attendance_id: @current_attendance.id, type: 'start'), method: :post, class: 'btn btn-info'

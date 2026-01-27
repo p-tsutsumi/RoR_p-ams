@@ -6,7 +6,8 @@ class AttendancesController < ApplicationController
   def create
     @current_attendance ||= Attendance.new(
       user_id: session[:user_id],
-      working_date: Date.current
+      working_date: Date.current,
+      work_category: params[:work_category]
     )
     if @current_attendance.clock_in_at.present?
       redirect_to attendances_path, alert: "すでに出勤済みです。"

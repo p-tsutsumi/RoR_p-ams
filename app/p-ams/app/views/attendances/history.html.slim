@@ -26,6 +26,7 @@
         thead.table-light
           tr
             th.text-center width="80" 日付
+            th.text-center width="80" 区分
             th.text-center width="80" 曜日
             th.text-center 出勤
             th.text-center 退勤
@@ -37,6 +38,15 @@
             
             tr class=row_class
               td.text-center = day.day
+              td 
+                - if attendance
+                  - case attendance.work_category
+                  - when 'telework'
+                    span.badge.rounded-pill.bg-info.text-dark = attendance.work_category_i18n
+                  - when 'paid_leave', 'half_leave'
+                    span.badge.rounded-pill.bg-warning.text-dark = attendance.work_category_i18n
+                  - else
+                    span.badge.rounded-pill.bg-secondary = attendance.work_category_i18n
               td.text-center = %w(日 月 火 水 木 金 土)[day.wday]
               td.text-center.fw-bold = attendance&.clock_in_at&.strftime("%H:%M") || "-"
               td.text-center.fw-bold = attendance&.clock_out_at&.strftime("%H:%M") || "-"

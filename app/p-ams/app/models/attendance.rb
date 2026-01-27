@@ -2,6 +2,8 @@ class Attendance < ApplicationRecord
   validates :working_date, presence: true, uniqueness: { scope: :user_id }
   validates :user_id, presence: true
 
+  enum work_category: { normal: 0, telework: 1, paid_leave: 2, harf_learve: 3 }
+
   has_many :break_times do
     def last_private
       where(break_type: :private_out).order(:id).last
